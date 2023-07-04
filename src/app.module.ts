@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 
 import { UsersModule } from './users/users.module';
 import { CoffeesModule } from './coffees/coffees.module';
+import { IamModule } from './iam/iam.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 
     UsersModule,
     CoffeesModule,
+    IamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
