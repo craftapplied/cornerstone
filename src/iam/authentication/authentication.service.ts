@@ -16,6 +16,9 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import { randomUUID } from 'crypto';
+import { InvalidateRefreshTokenError } from './exceptions/invalidate-refresh-token.exception';
 
 @Injectable()
 export class AuthenticationService {
@@ -25,6 +28,7 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -64,6 +68,8 @@ export class AuthenticationService {
   }
 
   async generateTokens(user: User) {
+    const refreshTokenId = randomUUID();
+
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken<Partial<ActiveUserData>>(
         user.id,
@@ -71,16 +77,22 @@ export class AuthenticationService {
         { email_address: user.email_address },
       ),
 
-      this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl),
+      this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl, {
+        // TODO(DBB) : Add interface to describe
+        // refreshTokenId payload structure
+        refreshTokenId,
+      }),
     ]);
+
+    await this.refreshTokenIdsStorage.insert(user.id, refreshTokenId);
 
     return { accessToken, refreshToken };
   }
 
   async refreshTokens(refreshTokenDto: RefreshTokenDto) {
     try {
-      const { sub } = await this.jwtService.verifyAsync<
-        Pick<ActiveUserData, 'sub'>
+      const { sub, refreshTokenId } = await this.jwtService.verifyAsync<
+        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
       >(refreshTokenDto.refreshToken, {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
@@ -91,9 +103,29 @@ export class AuthenticationService {
         id: sub,
       });
 
+      const isValid = await this.refreshTokenIdsStorage.validate(
+        user.id,
+        refreshTokenId,
+      );
+
+      // Rotate
+      if (isValid) {
+        await this.refreshTokenIdsStorage.invalidate(user.id, refreshTokenId);
+      } else {
+        throw new Error('Refresh token is invalid');
+      }
+
       return this.generateTokens(user);
     } catch (error) {
-      console.error(error);
+      if (error instanceof InvalidateRefreshTokenError) {
+        // TODO(DBB) : Log as a potential security issue
+
+        // TODO(DBB) : Email notification that credential might
+        // have been stolen, contact support
+
+        throw new UnauthorizedException('Access denied');
+      }
+
       throw new UnauthorizedException();
     }
   }
