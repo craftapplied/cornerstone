@@ -20,9 +20,12 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: String(process.env.DATABASE_PASSWORD),
       database: String(process.env.DATABASE_NAME),
 
-      autoLoadEntities: Boolean(process.env.TYPEORM_AUTOLOAD) || true,
-      synchronize: Boolean(process.env.TYPEORM_SYNCHRONIZE) || false,
-      logging: Boolean(process.env.TYPEORM_LOGGING) || false,
+      // autoLoadEntities: Boolean(process.env.TYPEORM_AUTOLOAD),
+      autoLoadEntities: true,
+      // synchronize: Boolean(process.env.TYPEORM_SYNCHRONIZE),
+      synchronize: true,
+      // logging: Boolean(process.env.TYPEORM_LOGGING),
+      logging: false,
 
       entities: ['dist/users/entities/*.entity.js'],
       subscribers: [],
