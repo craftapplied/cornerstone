@@ -15,6 +15,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): ExtendedTypeOrmModuleOptions {
+    console.log('--- Node Env Start ---');
+    console.log(this.configService.get<string>('NODE_ENV'));
+    console.log('--- Node Env End ---');
+    console.log('--- App Env Start ---');
+    console.log(this.configService.get<string>('APP_ENV'));
+    console.log('--- App Env End ---');
+
     return {
       type: 'postgres' as 'postgres',
       // host: String(process.env.DATABASE_HOST),
@@ -22,6 +29,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       // port: Number(process.env.DATABASE_PORT),
       port: this.configService.get<number>('DATABASE_PORT'),
       // username: String(process.env.DATABASE_USERNAME),
+
+      ...(this.configService.get<string>('NODE_ENV') === 'production' && {
+        extra: {
+          socketPath: this.configService.get<string>('DATABASE_SOCKET'),
+        },
+      }),
+
       username: this.configService.get<string>('DATABASE_USERNAME'),
       // password: String(process.env.DATABASE_PASSWORD),
       password: this.configService.get<string>('DATABASE_PASSWORD'),
