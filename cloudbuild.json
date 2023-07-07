@@ -5,7 +5,7 @@
       "args": [
         "build",
         "-t",
-        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:latest",
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:{$COMMIT_SHA}",
         "."
       ]
     },
@@ -13,7 +13,20 @@
       "name": "gcr.io/cloud-builders/docker",
       "args": [
         "push",
-        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:latest"
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:{$COMMIT_SHA}"
+      ]
+    },
+    {
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk",
+      "entrypoint": "gcloud",
+      "args": [
+        "run",
+        "deploy",
+        "nest-auth",
+        "--image",
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:{$COMMIT_SHA}",
+        "region",
+        "europe-west2"
       ]
     }
   ],
