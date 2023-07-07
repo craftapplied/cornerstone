@@ -1,0 +1,23 @@
+{
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:${COMMIT_SHA}",
+        "."
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth"
+      ]
+    }
+  ],
+  "options": {
+    "logging": "CLOUD_LOGGING_ONLY"
+  }
+}
