@@ -15,41 +15,21 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): ExtendedTypeOrmModuleOptions {
-    console.log('--- Node Env Start ---');
-    console.log(this.configService.get<string>('NODE_ENV'));
-    console.log('--- Node Env End ---');
-    console.log('--- App Env Start ---');
-    console.log(this.configService.get<string>('APP_ENV'));
-    console.log('--- App Env End ---');
-
     return {
       type: 'postgres' as 'postgres',
-      // host: String(process.env.DATABASE_HOST),
       host: this.configService.get<string>('DATABASE_HOST'),
-      // port: Number(process.env.DATABASE_PORT),
       port: this.configService.get<number>('DATABASE_PORT'),
-      // username: String(process.env.DATABASE_USERNAME),
-
-      ...(this.configService.get<string>('NODE_ENV') === 'production' && {
-        extra: {
-          socketPath: this.configService.get<string>('DATABASE_SOCKET'),
-        },
-      }),
-
+      // ...(this.configService.get<string>('NODE_ENV') === 'production' && {
+      //   extra: {
+      //     socketPath: this.configService.get<string>('DATABASE_SOCKET'),
+      //   },
+      // }),
       username: this.configService.get<string>('DATABASE_USERNAME'),
-      // password: String(process.env.DATABASE_PASSWORD),
       password: this.configService.get<string>('DATABASE_PASSWORD'),
-      // database: String(process.env.DATABASE_NAME),
       database: this.configService.get<string>('DATABASE_NAME'),
 
-      // autoLoadEntities: Boolean(process.env.TYPEORM_AUTOLOAD),
-      // autoLoadEntities: true,
       autoLoadEntities: this.configService.get<boolean>('TYPEORM_AUTOLOAD'),
-      // synchronize: Boolean(process.env.TYPEORM_SYNCHRONIZE),
-      // synchronize: true,
       synchronize: this.configService.get<boolean>('TYPEORM_SYNCHRONIZE'),
-      // logging: Boolean(process.env.TYPEORM_LOGGING),
-      // logging: false,
       logging: this.configService.get<boolean>('TYPEORM_LOGGING'),
 
       entities: ['dist/users/entities/*.entity.js'],
