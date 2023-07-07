@@ -11,22 +11,23 @@ import { UsersModule } from './users/users.module';
 import { CoffeesModule } from './coffees/coffees.module';
 import { IamModule } from './iam/iam.module';
 
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['.env'],
-      isGlobal: true,
-      cache: true,
-    }),
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
-    }),
+// @Module({
+//   imports: [
+//     ConfigModule.forRoot({
+//       envFilePath: ['.env'],
+//       isGlobal: true,
+//       cache: true,
+//     }),
+//     TypeOrmModule.forRootAsync({
+//       useClass: TypeOrmConfigService,
+//     }),
 
-    UsersModule,
-    CoffeesModule,
-    IamModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
+//     UsersModule,
+//     CoffeesModule,
+//     IamModule,
+//   ],
+//   controllers: [AppController],
+//   providers: [AppService],
+// })
+@Module({})
 export class AppModule {}
