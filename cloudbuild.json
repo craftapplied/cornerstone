@@ -25,7 +25,7 @@
         "nest-auth",
         "--image",
         "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:${COMMIT_SHA}",
-        "region",
+        "--region",
         "europe-west2"
       ]
     }
