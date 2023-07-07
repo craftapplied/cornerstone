@@ -5,7 +5,7 @@
       "args": [
         "build",
         "-t",
-        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:${COMMIT_SHA}",
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:latest",
         "."
       ]
     },
@@ -13,7 +13,7 @@
       "name": "gcr.io/cloud-builders/docker",
       "args": [
         "push",
-        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth"
+        "europe-west2-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/nest-auth:latest"
       ]
     }
   ],
