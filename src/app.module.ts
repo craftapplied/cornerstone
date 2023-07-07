@@ -11,23 +11,24 @@ import { UsersModule } from './users/users.module';
 import { CoffeesModule } from './coffees/coffees.module';
 import { IamModule } from './iam/iam.module';
 
-// @Module({
-//   imports: [
-//     ConfigModule.forRoot({
-//       envFilePath: ['.env'],
-//       isGlobal: true,
-//       cache: true,
-//     }),
-//     TypeOrmModule.forRootAsync({
-//       useClass: TypeOrmConfigService,
-//     }),
+console.log(`API Build: v0.0.0`);
 
-//     UsersModule,
-//     CoffeesModule,
-//     IamModule,
-//   ],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-@Module({})
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true,
+      cache: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+    }),
+
+    UsersModule,
+    CoffeesModule,
+    IamModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
 export class AppModule {}
