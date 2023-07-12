@@ -5,6 +5,12 @@
 ```bash
 # install with pnpm
 $ pnpm install
+
+# check updates
+$ pnpm outdated
+
+# update outdated
+$ npm update
 ```
 
 ## Running the app

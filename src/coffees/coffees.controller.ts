@@ -21,6 +21,7 @@ export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
   @Roles(Role.Admin)
+  @Roles(Role.SuperAdmin)
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
     return this.coffeesService.create(createCoffeeDto);
@@ -39,6 +40,7 @@ export class CoffeesController {
   }
 
   @Roles(Role.Admin)
+  @Roles(Role.SuperAdmin)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(+id, updateCoffeeDto);
