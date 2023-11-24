@@ -60,7 +60,7 @@ export default function SwitcherDarkMode() {
 
   return (
     <>
-      <div class="container">
+      <div class="flex-none">
         <button
           id="theme-toggle"
           type="button"

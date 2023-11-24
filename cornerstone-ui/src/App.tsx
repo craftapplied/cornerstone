@@ -1,7 +1,7 @@
 import "flowbite";
 
 import Layout from "./components/_globals/Layout";
-import Header from "./components/_globals/Header";
+import Header from "./components/_globals/header/Header";
 import Content from "./components/_globals/Content";
 import Footer from "./components/_globals/Footer";
 
